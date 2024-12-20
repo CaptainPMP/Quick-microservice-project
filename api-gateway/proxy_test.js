@@ -3,6 +3,7 @@ const { createProxyMiddleware } = require('http-proxy-middleware');
 
 // Create the first server (port 3000)
 const app1 = express();
+app1.use(express.json());
 app1.get('/', (req, res) => {
     res.send('Hello from server 1 (port 3000)');
 });
@@ -19,6 +20,13 @@ app2.use(
     '/proxy',
     createProxyMiddleware({
         target: 'http://localhost:3000/proxy', // Proxy requests to the first server
+        changeOrigin: true,
+    })
+);
+app2.use(
+    '/proxy2',
+    createProxyMiddleware({
+        target: 'http://localhost:5001/api/users/login', // Proxy requests to the first server
         changeOrigin: true,
     })
 );
